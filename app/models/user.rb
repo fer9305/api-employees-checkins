@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
   include DeviseTokenAuth::Concerns::User
 
-  ROLES = %i[admin employee].freeze
+  ROLES = %w[admin employee].freeze
 
   validates :email, presence: true, uniqueness: true
   validates :role, presence: true, inclusion: ROLES
