@@ -9,4 +9,7 @@ class User < ActiveRecord::Base
   include DeviseTokenAuth::Concerns::User
 
   ROLES = %i[admin employee].freeze
+
+  validates :email, presence: true, uniqueness: true
+  validates :role, presence: true, inclusion: ROLES
 end
