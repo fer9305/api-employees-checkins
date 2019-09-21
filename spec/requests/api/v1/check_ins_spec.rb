@@ -113,4 +113,34 @@ RSpec.describe "CheckIns API", type: :request do
       end
     end
   end
+
+  describe '#show' do
+    let!(:check_ins) { create_list(:check_in, 5, user: employee) }
+    let!(:other_employee) { create(:user, :employee) }
+    let!(:other_check_ins) { create_list(:check_in, 5, user: other_employee) }
+
+    it 'returns user with checkins' do
+      get "/employees/#{employee.id}/check_ins", headers: auth_headers
+
+      expect(response_body['employees'].first['check_ins'].size).to eq(check_ins.size)
+    end
+
+    context 'when employee tries to get its checkins' do
+      it 'returns checkins' do
+        employee_auth = employee.create_new_auth_token
+
+        get "/employees/#{employee.id}/check_ins", headers: employee_auth
+        expect(response_body['employees'].first['check_ins'].size).to eq(check_ins.size)
+      end
+    end
+
+    context 'when employee tries to get checkins from other employee' do
+      it 'returns an error' do
+        employee_auth = employee.create_new_auth_token
+
+        get "/employees/#{other_employee.id}/check_ins", headers: employee_auth
+        expect(response_body['employees']).to be_empty
+      end
+    end
+  end
 end

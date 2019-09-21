@@ -24,6 +24,14 @@ class CheckInsController < ApplicationController
     render json: { error: e.message }, status: :unprocessable_entity
   end
 
+  # GET /employees/:employee_id/check_ins
+  def show
+    @employees = User.accessible_by(current_ability).
+      employees.
+      where(id: params[:employee_id]).
+      includes(:check_ins)
+  end
+
   private
     def validate_check_in
       if CheckIn.today.present?

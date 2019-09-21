@@ -3,6 +3,6 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   resources :employees, only: [:index], format: "json" do
-    resource :check_ins, only: [:create, :update]
+    resource :check_ins, only: [:create, :update, :show]
   end
 end
