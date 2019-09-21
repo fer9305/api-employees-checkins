@@ -21,4 +21,8 @@ class User < ActiveRecord::Base
   validates :role, presence: true, inclusion: ROLES
 
   scope :employees, -> { where(role: EMPLOYEE) }
+
+  def admin?
+    role == ADMIN
+  end
 end

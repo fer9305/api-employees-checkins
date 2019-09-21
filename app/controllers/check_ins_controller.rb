@@ -1,4 +1,5 @@
 class CheckInsController < ApplicationController
+  load_and_authorize_resource
   before_action :authenticate_user!
   before_action :set_employee
   before_action :validate_check_in, only: [:create]

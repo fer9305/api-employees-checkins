@@ -12,16 +12,6 @@ RSpec.describe "CheckIns API", type: :request do
       }
     end
 
-    it 'returns an error without auth headers' do
-      post "/employees/#{employee.id}/check_ins", params: create_params
-
-      expected_error = {
-        "errors"=> ["You need to sign in or sign up before continuing."]
-      }
-
-      expect(response_body).to eq(expected_error)
-    end
-
     it 'creates a new check in for employee' do
       expect do
         post "/employees/#{employee.id}/check_ins", params: create_params, headers: auth_headers
@@ -57,6 +47,16 @@ RSpec.describe "CheckIns API", type: :request do
           expect(response_body).to eq(expected_error)
         end
       end
+
+      context 'when employee tries to do a check in' do
+        it 'raises an error' do
+          employee_auth = employee.create_new_auth_token
+
+          expect do
+            post "/employees/#{employee.id}/check_ins", params: create_params, headers: employee_auth
+          end.to raise_error(CanCan::AccessDenied, /You are not authorized to access this page./)
+        end
+      end
     end
   end
 
@@ -66,16 +66,6 @@ RSpec.describe "CheckIns API", type: :request do
       {
         end_time: Time.current + 1.minute
       }
-    end
-
-    it 'returns an error without auth headers' do
-      put "/employees/#{employee.id}/check_ins", params: update_params
-
-      expected_error = {
-        "errors"=> ["You need to sign in or sign up before continuing."]
-      }
-
-      expect(response_body).to eq(expected_error)
     end
 
     it 'updates check in with end_time' do
@@ -109,6 +99,16 @@ RSpec.describe "CheckIns API", type: :request do
           }
           
           expect(response_body).to eq(expected_error)
+        end
+      end
+
+      context 'when employee tries to do a check in' do
+        it 'raises an error' do
+          employee_auth = employee.create_new_auth_token
+
+          expect do
+            put "/employees/#{employee.id}/check_ins", params: update_params, headers: employee_auth
+          end.to raise_error(CanCan::AccessDenied, /You are not authorized to access this page./)
         end
       end
     end
