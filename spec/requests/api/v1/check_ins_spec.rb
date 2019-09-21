@@ -15,7 +15,6 @@ RSpec.describe "CheckIns API", type: :request do
       parameter name: :uid, in: :header, type: :string, required: true
 
       response '200', 'employee check ins retrieved' do
-        run_test!
       end
     end
 
@@ -35,7 +34,6 @@ RSpec.describe "CheckIns API", type: :request do
       parameter name: :uid, in: :header, type: :string, required: true
 
       response '201', 'Creates check in with begin_time for employee' do
-        run_test!
       end
     end
 
@@ -55,7 +53,6 @@ RSpec.describe "CheckIns API", type: :request do
       parameter name: :uid, in: :header, type: :string, required: true
 
       response '200', 'Updates check in with begin_time for employee' do
-        run_test!
       end
     end
   end

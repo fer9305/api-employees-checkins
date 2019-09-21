@@ -16,7 +16,6 @@ RSpec.describe "Employees API", type: :request do
       parameter name: :uid, in: :header, type: :string, required: true
       
       response '200', 'employees retrieved' do
-        run_test!
       end
     end
   end
