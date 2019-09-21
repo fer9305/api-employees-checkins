@@ -15,6 +15,8 @@ class User < ActiveRecord::Base
     EMPLOYEE
   ].freeze
 
+  has_many :check_ins
+  
   validates :email, presence: true, uniqueness: true
   validates :role, presence: true, inclusion: ROLES
 
