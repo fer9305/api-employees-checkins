@@ -1,13 +1,11 @@
 class CheckInsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_employee
+  before_action :validate_check_in, only: [:create]
+  before_action :validate_present_check_in, only: [:update]
 
   # POST /employees/:employee_id/check_ins
   def create
-    if CheckIn.today.present?
-      return render json: { error: "Begin time already registered for today" }, status: :conflict
-    end
-
     check_in = @employee.check_ins.create!(create_params)
 
     render json: check_in, status: :created
@@ -17,10 +15,6 @@ class CheckInsController < ApplicationController
 
   # PUT /employees/:employee_id/check_ins
   def update
-    unless CheckIn.today.present?
-      return render json: { error: "Begin time have not been registered for today" }, status: :conflict
-    end
-
     check_in = @employee.check_ins.today.take
     check_in.update!(update_params)
 
@@ -30,6 +24,17 @@ class CheckInsController < ApplicationController
   end
 
   private
+    def validate_check_in
+      if CheckIn.today.present?
+        return render json: { error: "Begin time already registered for today" }, status: :conflict
+      end
+    end
+
+    def validate_present_check_in
+      unless CheckIn.today.present?
+        return render json: { error: "Begin time have not been registered for today" }, status: :conflict
+      end
+    end
 
     def set_employee
       @employee = User.employees.find(params[:employee_id])
