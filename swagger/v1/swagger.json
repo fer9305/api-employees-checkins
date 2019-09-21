@@ -1,0 +1,197 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "API V1",
+    "version": "v1"
+  },
+  "paths": {
+    "/employees/{employee_id}/check_ins": {
+      "get": {
+        "summary": "Retrieve employee check ins",
+        "tags": [
+          "Employee Check Ins"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "employee_id",
+            "in": "path",
+            "type": "integer",
+            "required": true
+          },
+          {
+            "name": "access-token",
+            "in": "header",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "client",
+            "in": "header",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "uid",
+            "in": "header",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "employee check ins retrieved"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create employee check ins",
+        "tags": [
+          "Employee Check Ins"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "employee_id",
+            "in": "path",
+            "type": "integer",
+            "required": true
+          },
+          {
+            "name": "params",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "begin_time": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "begin_time"
+              ]
+            }
+          },
+          {
+            "name": "access-token",
+            "in": "header",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "client",
+            "in": "header",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "uid",
+            "in": "header",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Creates check in with begin_time for employee"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update employee check ins",
+        "tags": [
+          "Employee Check Ins"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "employee_id",
+            "in": "path",
+            "type": "integer",
+            "required": true
+          },
+          {
+            "name": "params",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "end_time": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "end_time"
+              ]
+            }
+          },
+          {
+            "name": "access-token",
+            "in": "header",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "client",
+            "in": "header",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "uid",
+            "in": "header",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updates check in with begin_time for employee"
+          }
+        }
+      }
+    },
+    "/employees": {
+      "get": {
+        "summary": "Retrieves employees",
+        "tags": [
+          "Employees"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "access-token",
+            "in": "header",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "client",
+            "in": "header",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "uid",
+            "in": "header",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "employees retrieved"
+          }
+        }
+      }
+    }
+  }
+}

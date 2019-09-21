@@ -47,3 +47,5 @@ gem 'devise_token_auth'
 gem 'cancancan'
 # factory_bot is a fixtures replacement with a straightforward definition syntax
 gem "factory_bot_rails"
+
+gem 'rswag'

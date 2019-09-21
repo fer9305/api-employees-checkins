@@ -4,6 +4,61 @@ RSpec.describe "CheckIns API", type: :request do
   let!(:user) { create(:user) }
   let!(:employee) { create(:user, :employee) }
   let(:auth_headers) { user.create_new_auth_token }
+  
+  path '/employees/{employee_id}/check_ins' do
+    get 'Retrieve employee check ins' do
+      tags 'Employee Check Ins'
+      consumes 'application/json'
+      parameter name: :employee_id, in: :path, type: :integer, required: true
+      parameter name: :'access-token', in: :header, type: :string, required: true
+      parameter name: :client, in: :header, type: :string, required: true
+      parameter name: :uid, in: :header, type: :string, required: true
+
+      response '200', 'employee check ins retrieved' do
+        run_test!
+      end
+    end
+
+    post 'Create employee check ins' do
+      tags 'Employee Check Ins'
+      consumes 'application/json'
+      parameter name: :employee_id, in: :path, type: :integer, required: true
+      parameter name: :params, in: :body, schema: {
+        type: :object,
+        properties: {
+          begin_time: { type: :string }
+        },
+        required: %w[ begin_time ]
+      }
+      parameter name: :'access-token', in: :header, type: :string, required: true
+      parameter name: :client, in: :header, type: :string, required: true
+      parameter name: :uid, in: :header, type: :string, required: true
+
+      response '201', 'Creates check in with begin_time for employee' do
+        run_test!
+      end
+    end
+
+    put 'Update employee check ins' do
+      tags 'Employee Check Ins'
+      consumes 'application/json'
+      parameter name: :employee_id, in: :path, type: :integer, required: true
+      parameter name: :params, in: :body, schema: {
+        type: :object,
+        properties: {
+          end_time: { type: :string }
+        },
+        required: %w[ end_time ]
+      }
+      parameter name: :'access-token', in: :header, type: :string, required: true
+      parameter name: :client, in: :header, type: :string, required: true
+      parameter name: :uid, in: :header, type: :string, required: true
+
+      response '200', 'Updates check in with begin_time for employee' do
+        run_test!
+      end
+    end
+  end
 
   describe '#create' do
     let(:create_params) do

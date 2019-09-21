@@ -34,13 +34,13 @@ class CheckInsController < ApplicationController
 
   private
     def validate_check_in
-      if CheckIn.today.present?
+      if @employee.check_ins.today.present?
         return render json: { error: "Begin time already registered for today" }, status: :conflict
       end
     end
 
     def validate_present_check_in
-      unless CheckIn.today.present?
+      unless @employee.check_ins.today.present?
         return render json: { error: "Begin time have not been registered for today" }, status: :conflict
       end
     end
