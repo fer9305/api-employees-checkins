@@ -15,10 +15,18 @@ class User < ActiveRecord::Base
     EMPLOYEE
   ].freeze
 
+  MALE = 'male'.freeze
+  FEMALE = 'female'.freeze
+  GENDERS = [
+    MALE,
+    FEMALE
+  ].freeze
+
   has_many :check_ins
   
   validates :email, presence: true, uniqueness: true
   validates :role, presence: true, inclusion: ROLES
+  validates :gender, presence: true, inclusion: GENDERS
 
   scope :employees, -> { where(role: EMPLOYEE) }
 

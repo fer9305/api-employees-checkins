@@ -5,6 +5,8 @@ FactoryBot.define do
     password  { FFaker::Internet.password }
     email  { FFaker::Internet.email }
     role { 'admin' }
+    gender { 'male' }
+    birthday { Time.current - 25.years }
 
     trait :employee do
       role { 'employee' }
