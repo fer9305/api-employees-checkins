@@ -34,7 +34,7 @@ RSpec.describe "Employees API", type: :request do
     it 'returns all employees' do
       get '/employees', headers: auth_headers
 
-      expect(response_body['employees'].size).to eq(2)
+      expect(response_body.size).to eq(2)
     end
   end
 end

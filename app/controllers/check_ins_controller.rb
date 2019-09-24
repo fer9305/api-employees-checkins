@@ -5,6 +5,13 @@ class CheckInsController < ApplicationController
   before_action :validate_check_in, only: [:create]
   before_action :validate_present_check_in, only: [:update]
 
+  # GET /employees/:employee_id/check_ins
+  def index
+    @check_ins = CheckIn.accessible_by(current_ability).
+      where(user_id: params[:employee_id]).
+      order(created_at: :desc)
+  end
+
   # POST /employees/:employee_id/check_ins
   def create
     check_in = @employee.check_ins.create!(create_params)
@@ -46,7 +53,7 @@ class CheckInsController < ApplicationController
     end
 
     def set_employee
-      @employee = User.employees.find(params[:employee_id])
+      @employee = User.accessible_by(current_ability).employees.find(params[:employee_id])
     rescue
       render json: {error: "Employee does not exists"}, status: :not_found  
     end

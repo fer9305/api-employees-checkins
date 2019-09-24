@@ -3,6 +3,6 @@ class EmployeesController < ApplicationController
 
   # GET /employees
   def index
-    @employees = User.employees
+    @employees =  User.accessible_by(current_ability).employees
   end
 end

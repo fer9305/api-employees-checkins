@@ -121,30 +121,17 @@ RSpec.describe "CheckIns API", type: :request do
     end
 
     it 'updates check in with end_time' do
-      put "/employees/#{employee.id}/check_ins", params: update_params, headers: auth_headers
+      put "/employees/#{employee.id}/check_ins/#{check_in.id}", params: update_params, headers: auth_headers
 
       check_in = employee.check_ins.last
       expect(check_in.end_time.to_i).to eq(update_params[:end_time].to_i)
     end
 
     context 'failures' do
-      context 'with not previous registered Checkin for today' do
-        it 'raises an error' do
-          check_in.delete
-          put "/employees/#{employee.id}/check_ins", params: update_params, headers: auth_headers
-
-          expected_error = {
-            "error"=>"Begin time have not been registered for today"
-          }
-
-          expect(response_body).to eq(expected_error)
-        end
-      end
-
       context 'with end_time < begin_time' do
         it 'raises an error' do
           update_params[:end_time] = Time.current - 3.hours
-          put "/employees/#{employee.id}/check_ins", params: update_params, headers: auth_headers
+          put "/employees/#{employee.id}/check_ins/#{check_in.id}", params: update_params, headers: auth_headers
 
           expected_error = {
             "error"=>"Validation failed: End time must be after the begin time"
@@ -159,7 +146,7 @@ RSpec.describe "CheckIns API", type: :request do
           employee_auth = employee.create_new_auth_token
 
           expect do
-            put "/employees/#{employee.id}/check_ins", params: update_params, headers: employee_auth
+            put "/employees/#{employee.id}/check_ins/#{check_in.id}", params: update_params, headers: employee_auth
           end.to raise_error(CanCan::AccessDenied, /You are not authorized to access this page./)
         end
       end
@@ -174,7 +161,7 @@ RSpec.describe "CheckIns API", type: :request do
     it 'returns user with checkins' do
       get "/employees/#{employee.id}/check_ins", headers: auth_headers
 
-      expect(response_body['employees'].first['check_ins'].size).to eq(check_ins.size)
+      expect(response_body['check_ins'].size).to eq(check_ins.size)
     end
 
     context 'when employee tries to get its checkins' do
@@ -182,7 +169,7 @@ RSpec.describe "CheckIns API", type: :request do
         employee_auth = employee.create_new_auth_token
 
         get "/employees/#{employee.id}/check_ins", headers: employee_auth
-        expect(response_body['employees'].first['check_ins'].size).to eq(check_ins.size)
+        expect(response_body['check_ins'].size).to eq(check_ins.size)
       end
     end
 
@@ -191,7 +178,10 @@ RSpec.describe "CheckIns API", type: :request do
         employee_auth = employee.create_new_auth_token
 
         get "/employees/#{other_employee.id}/check_ins", headers: employee_auth
-        expect(response_body['employees']).to be_empty
+        expected_error = {
+          "error"=>"Employee does not exists"
+        }
+        expect(response_body).to eq(expected_error)
       end
     end
   end
